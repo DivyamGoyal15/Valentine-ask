@@ -10,7 +10,7 @@ const CONFIG = {
 
     // ─── Names ─────────────────────────────────
     partnerName: "Hermione",        // 💌 Your partner's name
-    yourName: "Harry",       // 💌 Your name
+    yourName: "Divyam",       // 💌 Your name
 
     // ─── Proposal Message ──────────────────────
     // Shown under the main question. Use {partnerName} and {yourName} as placeholders.
