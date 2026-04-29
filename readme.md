@@ -2,6 +2,11 @@
 
 A cute, animated, fully customizable Valentine's proposal website. Deploy in minutes — no coding required.
 
+## 🌐 Live Preview
+
+💖 **Demo Website:**  
+👉 https://divyamgoyal15.github.io/Valentine-ask/
+
 ## 🚀 Quick Start
 
 1. **Customize** — Open `config.js` and edit the values (names, message, colors, date locations).
