@@ -1,0 +1,736 @@
+/* ============================================================
+   💖 VALENTINE WEBSITE — style.css
+   Soft romantic aesthetic · mobile-first · fully responsive
+   All theme colors are driven by CSS custom properties set
+   dynamically from config.js via script.js.
+   ============================================================ */
+
+
+/* ── 1. CSS CUSTOM PROPERTIES ─────────────────────────────── */
+:root {
+    /* Injected by script.js from config.js */
+    --color-primary: #ff6b9d;
+    --color-primary-alt: #ff9ec4;
+    --bg-gradient: linear-gradient(135deg, #fff0f5 0%, #ffe4ef 40%, #ffd6e8 100%);
+
+    /* Fixed design tokens */
+    --color-text: #5a2d4a;
+    --color-text-soft: #9b6b86;
+    --color-surface: rgba(255, 255, 255, 0.72);
+    --color-surface-hov: rgba(255, 255, 255, 0.88);
+    --color-white: #ffffff;
+
+    --radius-card: 28px;
+    --radius-btn: 50px;
+
+    --shadow-card: 0 8px 48px rgba(255, 107, 157, 0.18),
+        0 2px 12px rgba(255, 107, 157, 0.10);
+    --shadow-btn: 0 4px 20px rgba(255, 107, 157, 0.35);
+
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+
+    --transition-base: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-smooth: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+
+/* ── 2. RESET & BASE ──────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg-gradient);
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    /* prevent scroll during animation */
+    cursor: none;
+    /* hide default cursor — custom one in JS */
+    color: var(--color-text);
+}
+
+/* Restore cursor on touch devices */
+@media (hover: none) {
+    body {
+        cursor: auto;
+    }
+
+    #cursorSparkle {
+        display: none !important;
+    }
+}
+
+
+/* ── 3. BACKGROUND CANVAS ─────────────────────────────────── */
+#heartsCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+
+/* ── 4. CUSTOM CURSOR ─────────────────────────────────────── */
+#cursorSparkle {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--color-primary) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.05s linear, opacity 0.3s ease;
+    mix-blend-mode: multiply;
+    opacity: 0.7;
+}
+
+/* Sparkle trail dots */
+.sparkle-dot {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    animation: sparkle-fade 0.6s ease forwards;
+}
+
+@keyframes sparkle-fade {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+    }
+}
+
+
+/* ── 5. SCREENS ───────────────────────────────────────────── */
+.screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-smooth);
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.screen.exit {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* ── 6. CARD ──────────────────────────────────────────────── */
+.card {
+    background: var(--color-surface);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: clamp(32px, 6vw, 56px) clamp(28px, 7vw, 64px);
+    text-align: center;
+    max-width: 520px;
+    width: 100%;
+    position: relative;
+    z-index: 20;
+}
+
+/* Soft inner glow border */
+.card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: calc(var(--radius-card) + 1px);
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.9),
+            rgba(255, 182, 215, 0.4),
+            rgba(255, 255, 255, 0.2));
+    z-index: -1;
+}
+
+
+/* ── 7. ENTRANCE ANIMATION ────────────────────────────────── */
+.entrance-anim {
+    animation: entranceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes entranceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.82) translateY(24px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+
+/* ── 8. PETAL RING ────────────────────────────────────────── */
+.petal-ring {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    animation: petals 6s linear infinite;
+}
+
+@keyframes petals {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ── 9. HERO HEART ────────────────────────────────────────── */
+.hero-heart {
+    font-size: clamp(3rem, 10vw, 4.5rem);
+    display: block;
+    animation: heartbeat 1.4s ease-in-out infinite;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 12px rgba(255, 107, 157, 0.55));
+}
+
+@keyframes heartbeat {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    14% {
+        transform: scale(1.18);
+    }
+
+    28% {
+        transform: scale(1);
+    }
+
+    42% {
+        transform: scale(1.12);
+    }
+
+    70% {
+        transform: scale(1);
+    }
+}
+
+
+/* ── 10. TYPOGRAPHY ───────────────────────────────────────── */
+.proposal-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--color-text);
+    margin-bottom: 18px;
+}
+
+.name-highlight {
+    color: var(--color-primary);
+    font-style: italic;
+    position: relative;
+    white-space: nowrap;
+}
+
+/* Underline squiggle on the name */
+.name-highlight::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-alt));
+    border-radius: 2px;
+    animation: underlineGrow 0.6s 0.8s ease both;
+    transform-origin: left;
+}
+
+@keyframes underlineGrow {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.proposal-message {
+    font-size: clamp(0.85rem, 2.2vw, 1rem);
+    color: var(--color-text-soft);
+    line-height: 1.7;
+    margin-bottom: 14px;
+    font-weight: 300;
+}
+
+.signed-by {
+    font-size: 0.88rem;
+    color: var(--color-text-soft);
+    margin-bottom: 28px;
+    font-style: italic;
+}
+
+
+/* ── 11. BUTTONS ──────────────────────────────────────────── */
+.button-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: nowrap;
+    position: relative;
+}
+
+.btn {
+    position: relative;
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: var(--font-body);
+    font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    overflow: hidden;
+    transition: transform var(--transition-base),
+        box-shadow var(--transition-base),
+        filter var(--transition-base);
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-inner {
+    display: block;
+    padding: 14px 32px;
+    position: relative;
+    z-index: 1;
+}
+
+/* YES button */
+.btn-yes {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-alt));
+    color: #fff;
+    box-shadow: var(--shadow-btn);
+    min-width: 130px;
+}
+
+.btn-yes::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), transparent);
+    border-radius: var(--radius-btn);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-yes:hover {
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 8px 32px rgba(255, 107, 157, 0.55);
+}
+
+.btn-yes:hover::before {
+    opacity: 1;
+}
+
+.btn-yes:active {
+    transform: scale(0.97);
+}
+
+/* Pulse ring on YES button */
+.btn-yes::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: var(--radius-btn);
+    border: 2px solid var(--color-primary);
+    opacity: 0;
+    animation: pulsRing 2s ease-in-out infinite 0.5s;
+}
+
+@keyframes pulsRing {
+    0% {
+        opacity: 0;
+        transform: scale(1);
+    }
+
+    40% {
+        opacity: 0.6;
+    }
+
+    80% {
+        opacity: 0;
+        transform: scale(1.18);
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* NO button */
+.btn-no {
+    background: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-soft);
+    border: 1.5px solid rgba(200, 150, 170, 0.35);
+    min-width: 110px;
+    transition: transform var(--transition-base),
+        background 0.25s ease,
+        color 0.25s ease;
+    /* Position is set absolutely during the "run away" logic in JS */
+}
+
+.btn-no:hover {
+    background: rgba(255, 230, 240, 0.8);
+    color: var(--color-primary);
+}
+
+/* NO button "running away" class */
+.btn-no.running {
+    position: fixed;
+    z-index: 999;
+    transition: none;
+}
+
+
+/* ── 12. NO MESSAGE ───────────────────────────────────────── */
+.no-message {
+    margin-top: 14px;
+    font-size: 0.88rem;
+    color: var(--color-primary);
+    min-height: 1.4em;
+    font-style: italic;
+    animation: fadeInMsg 0.35s ease both;
+}
+
+@keyframes fadeInMsg {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ── 13. CELEBRATION SCREEN ───────────────────────────────── */
+#confettiCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.celebration-card {
+    z-index: 20;
+}
+
+.yay-emoji {
+    font-size: clamp(3rem, 10vw, 4.5rem);
+    display: block;
+    margin-bottom: 8px;
+    animation: yayPop 0.6s cubic-bezier(0.34, 1.9, 0.64, 1) both,
+        wobble 3s 1s ease-in-out infinite;
+}
+
+@keyframes yayPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes wobble {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    20% {
+        transform: rotate(-12deg);
+    }
+
+    40% {
+        transform: rotate(12deg);
+    }
+
+    60% {
+        transform: rotate(-6deg);
+    }
+
+    80% {
+        transform: rotate(6deg);
+    }
+}
+
+.celebration-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 8vw, 3.2rem);
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 12px;
+    text-shadow: 0 2px 16px rgba(255, 107, 157, 0.3);
+}
+
+.celebration-subtitle {
+    font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+    color: var(--color-text-soft);
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+.date-box {
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 158, 196, 0.1));
+    border: 1.5px solid rgba(255, 107, 157, 0.25);
+    border-radius: 18px;
+    padding: 20px 28px;
+    margin: 0 auto 24px;
+    max-width: 360px;
+    animation: dateReveal 0.5s 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes dateReveal {
+    from {
+        opacity: 0;
+        transform: scale(0.88);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.date-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-text-soft);
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.date-location {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+    font-weight: 700;
+    color: var(--color-primary);
+    font-style: italic;
+}
+
+.celebration-footer {
+    font-size: 0.88rem;
+    color: var(--color-text-soft);
+    font-style: italic;
+    margin-bottom: 28px;
+}
+
+/* Restart button */
+.btn-restart {
+    background: transparent;
+    color: var(--color-text-soft);
+    border: 1.5px solid rgba(200, 150, 170, 0.4);
+    font-size: 0.85rem;
+    padding: 10px 24px;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: var(--font-body);
+}
+
+.btn-restart:hover {
+    background: rgba(255, 107, 157, 0.08);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+
+/* ── 14. MUSIC BUTTON ─────────────────────────────────────── */
+.music-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 2px 12px rgba(255, 107, 157, 0.15);
+}
+
+.music-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 20px rgba(255, 107, 157, 0.3);
+}
+
+.music-btn.playing .music-icon {
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        display: inline-block;
+        transform: rotate(0deg);
+    }
+
+    to {
+        display: inline-block;
+        transform: rotate(360deg);
+    }
+}
+
+.music-btn.muted .music-icon::after {
+    content: '🔇';
+}
+
+
+/* ── 15. SCROLLBAR (aesthetic) ────────────────────────────── */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-primary-alt);
+    border-radius: 6px;
+}
+
+
+/* ── 16. RESPONSIVE TWEAKS ────────────────────────────────── */
+@media (max-width: 400px) {
+    .card {
+        border-radius: 20px;
+        padding: 28px 20px;
+    }
+
+    .button-row {
+        gap: 10px;
+    }
+
+    .btn-inner {
+        padding: 12px 22px;
+    }
+
+    .btn-yes {
+        min-width: 110px;
+    }
+
+    .btn-no {
+        min-width: 90px;
+    }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+    .hero-heart {
+        font-size: 2rem;
+        margin-bottom: 4px;
+    }
+
+    .petal-ring {
+        font-size: 0.8rem;
+        margin-bottom: 4px;
+    }
+
+    .card {
+        padding: 20px 32px;
+    }
+
+    .proposal-title {
+        font-size: 1.4rem;
+        margin-bottom: 12px;
+    }
+
+    .proposal-message {
+        margin-bottom: 8px;
+    }
+
+    .signed-by {
+        margin-bottom: 18px;
+    }
+}
+
+
+/* ── 17. UTILITY ──────────────────────────────────────────── */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Disable all transitions/animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

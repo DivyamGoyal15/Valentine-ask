@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Title is set dynamically in script.js via CONFIG -->
+    <title>💖 Will You Be My Valentine?</title>
+
+    <!-- Google Fonts: Playfair Display (romantic display) + DM Sans (clean body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- ░░ BACKGROUND HEARTS CANVAS ░░ -->
+    <canvas id="heartsCanvas" aria-hidden="true"></canvas>
+
+    <!-- ░░ CUSTOM CURSOR SPARKLE ░░ -->
+    <div id="cursorSparkle" aria-hidden="true"></div>
+
+    <!-- ░░ MUSIC TOGGLE ░░ (shown only if CONFIG.musicEnabled = true) -->
+    <button id="musicToggle" class="music-btn" aria-label="Toggle background music" hidden>
+        <span class="music-icon">🎵</span>
+    </button>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!--   SCREEN 1: PROPOSAL                       -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="screenProposal" class="screen active" role="main">
+
+        <div class="card entrance-anim">
+
+            <!-- Decorative petal ring -->
+            <div class="petal-ring" aria-hidden="true">
+                <span>🌸</span><span>💮</span><span>🌸</span><span>💮</span>
+                <span>🌸</span><span>💮</span><span>🌸</span><span>💮</span>
+            </div>
+
+            <!-- Big heart icon -->
+            <div class="hero-heart" aria-hidden="true">💖</div>
+
+            <!-- Proposal question — name injected by JS -->
+            <h1 class="proposal-title">
+                Will you be my Valentine,<br />
+                <span id="partnerNameDisplay" class="name-highlight"></span>?
+            </h1>
+
+            <!-- Optional sub-message from config -->
+            <p id="customMessage" class="proposal-message"></p>
+
+            <!-- Signed by -->
+            <p class="signed-by">
+                With all my love, <span id="yourNameDisplay" class="name-highlight"></span> 💌
+            </p>
+
+            <!-- YES / NO buttons -->
+            <div class="button-row">
+                <button id="yesBtn" class="btn btn-yes" aria-label="Yes!">
+                    <span class="btn-inner">YES 💖</span>
+                </button>
+                <button id="noBtn" class="btn btn-no" aria-label="No">
+                    <span class="btn-inner">NO 😢</span>
+                </button>
+            </div>
+
+            <!-- Playful message under NO button (hidden by default) -->
+            <p id="noMessage" class="no-message" aria-live="polite"></p>
+
+        </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════ -->
+    <!--   SCREEN 2: CELEBRATION                    -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="screenCelebration" class="screen" role="main" aria-hidden="true">
+
+        <!-- Confetti canvas (celebration burst) -->
+        <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+        <div class="card celebration-card entrance-anim">
+
+            <div class="yay-emoji" aria-hidden="true">🎉</div>
+
+            <h1 class="celebration-title">Yay! 💖</h1>
+
+            <p class="celebration-subtitle">
+                You just made me the happiest person alive,
+                <span id="celebPartnerName" class="name-highlight"></span>!
+            </p>
+
+            <!-- Random date location injected here -->
+            <div class="date-box">
+                <p class="date-label">Our date is at&hellip;</p>
+                <p id="dateLocation" class="date-location"></p>
+            </div>
+
+            <p class="celebration-footer">
+                Can't wait. 💕 — <span id="celebYourName" class="name-highlight"></span>
+            </p>
+
+            <!-- Restart button (lets you replay / show to someone else) -->
+            <button id="restartBtn" class="btn btn-restart" aria-label="Start over">
+                💌 Start Over
+            </button>
+
+        </div>
+    </section>
+
+
+    <!-- Load config first, then scripts -->
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
